@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: $font-family;
+}
+
+#app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-width: $medium-breackpoint;
+  margin: auto;
+}
+
+body {
+  background-color: $background-1;
+  overflow: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: $grey;
+  border-radius: 6px;
+}
+/* Selection */
+::-moz-selection {
+  color: $white;
+  background-color: $primary;
+}
+::selection {
+  color: $white;
+  background-color: $primary;
+}
