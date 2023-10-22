@@ -28,7 +28,7 @@ button {
   transition: all $transition-1;
 }
 .button-container {
-  padding: 10px 20px;
+  padding: 8px 20px;
   background-color: $primary;
   color: $white;
   border-radius: 10px;

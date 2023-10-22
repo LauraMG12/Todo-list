@@ -1,39 +1,45 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 import ListItem from "./ListItem.vue";
 import NewItem from "./NewItem.vue";
 
-const items = ref<string[]>(["Hello", "world!"]);
-watch(items, () => console.log(items.value));
+interface todoItem {
+  id: string;
+  content: string;
+}
+const items = ref<todoItem[]>([
+  { id: crypto.randomUUID().toString(), content: "Hello" },
+  { id: crypto.randomUUID().toString(), content: "world!" },
+]);
 
 function addItem(inputText: string): void {
-  items.value.push(inputText);
+  const newItem: todoItem = {
+    id: crypto.randomUUID().toString(),
+    content: inputText,
+  };
+  items.value.push(newItem);
 }
-function removeItem(index: number): void {
+function removeItem(itemId: string): void {
+  const index = items.value.findIndex((item) => item.id === itemId);
   items.value.splice(index, 1);
 }
-function updateItem(index: number, newValue: string): void {
-  items.value.splice(index, 1, newValue);
+function updateItem(itemId: string, newValue: string): void {
+  const index = items.value.findIndex((item) => item.id === itemId);
+  items.value[index].content = newValue;
 }
-
-//TODO: update item
 </script>
 
 <template>
   <div class="todo-list">
-    <TransitionGroup
-      name="listItem"
-      tag="div"
-      class="items-list"
-      ref="itemsList"
-    >
+    <TransitionGroup name="list" tag="div" class="items-list">
       <ListItem
-        v-for="(item, index) in items"
-        :key="item"
-        :value="item"
-        @remove="removeItem(index)"
-        @update="updateItem(index, $event)"
+        v-for="item in items"
+        :key="item.id"
+        :value="item.content"
+        class="list-item"
+        @remove="removeItem(item.id)"
+        @update="updateItem(item.id, $event)"
       />
     </TransitionGroup>
     <div class="add-item">
@@ -47,6 +53,7 @@ function updateItem(index: number, newValue: string): void {
 
 .todo-list {
   background-color: $background-2;
+  position: relative;
   border-radius: 15px;
   padding: 25px 10px;
   display: grid;
@@ -62,16 +69,34 @@ function updateItem(index: number, newValue: string): void {
   }
 
   .items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    // FIXME: fixed height to keep when scroll bar appears
-    max-height: 90%;
+    display: block;
+    padding: 0 5px;
+    max-height: calc(
+      100vh -
+        (
+          $title-height + $footer-height + $add-item-height +
+            $todo-container-margin-height + $add-item-list-gap
+        )
+    );
     overflow-y: scroll;
+    overflow-x: hidden;
     position: relative;
     @media only screen and (max-width: $medium-breackpoint) {
       gap: 10px;
-      height: calc(100% - 80px);
+      max-height: calc(
+        100vh -
+          (
+            $title-height-mobile + $footer-height-mobile +
+              $add-item-height-mobile + $todo-container-margin-height-mobile +
+              $add-item-list-gap-mobile
+          )
+      );
+    }
+    .list-item:not(:last-child) {
+      margin-bottom: 15px;
+      @media only screen and (max-width: $medium-breackpoint) {
+        margin-bottom: 10px;
+      }
     }
   }
   .add-item {
@@ -86,5 +111,18 @@ function updateItem(index: number, newValue: string): void {
       align-items: center;
     }
   }
+}
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+.list-leave-active {
+  position: absolute;
 }
 </style>

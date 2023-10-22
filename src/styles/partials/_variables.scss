@@ -10,7 +10,6 @@ $background-3: #333741;
 $background-4: #3f454f;
 
 /* FONTS */
-
 $font-family: "Inter", sans-serif;
 
 // DESKTOP
@@ -27,3 +26,19 @@ $medium-breackpoint: 900px;
 
 /* TRANSITIONS */
 $transition-1: 0.2s ease;
+
+/* SIZES */
+$title-height: 100px;
+$title-height-mobile: 60px;
+
+$footer-height: 60px;
+$footer-height-mobile: 0px;
+
+$add-item-height: 45px;
+$add-item-height-mobile: 60px;
+
+$todo-container-margin-height: 50px;
+$todo-container-margin-height-mobile: 0px;
+
+$add-item-list-gap: 25px;
+$add-item-list-gap-mobile: 20px;
